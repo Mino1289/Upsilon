@@ -79,6 +79,7 @@ public:
     Integral,
     InvBinom,
     InvNorm,
+    InverseModulaire,
     KMat,
     LeastCommonMultiple,
     Logarithm,

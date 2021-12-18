@@ -48,6 +48,44 @@ Integer Arithmetic::LCM(const Integer & a, const Integer & b) {
   return Integer::Multiplication(i, Integer::Division(j, GCD(i, j)).quotient);
 }
 
+Integer Arithmetic::IMOD(const Integer & a, const Integer & n) {
+  /* This function implement the modular multiplicative inverse.
+  * it return u such that u*a = 1 (mod n)
+  * and 0 aka undef, if GCD(a,n) != 1
+  */
+  
+  if (!Arithmetic::GCD(a, n).isOne()) {
+    return Integer(0);
+  }
+  // we initialize the temp variable 
+  Integer x0 = Integer(0), x1 = Integer(1), y0 = Integer(1), y1 = Integer(0);
+  Integer q, tempx, tempy, c;
+  Integer b = n;
+
+  do
+  {
+    c = a;
+    q = Integer::Division(b, c).quotient;
+    c = Integer::Division(b, c).remainder;
+    b = c;
+
+    tempy = y0;
+    y0 = y1;
+    y1 = Integer::Subtraction(tempy, Integer::Multiplication(q, y1));
+
+    tempx = x0;
+    x0 = x1;
+    x1 = Integer::Subtraction(tempx, Integer::Multiplication(q, x1));
+  } while (!a.isZero());
+  
+  Integer result = Integer::Division(x0, n).remainder;
+
+  if (result.isNegative()) {
+    result = Integer::Addition(result, n);
+  }
+  return result;
+}
+
 int Arithmetic::GCD(int a, int b) {
   assert(a >= 0 && b >= 0);
   if (b > a) {
@@ -71,6 +109,40 @@ int Arithmetic::LCM(int a, int b) {
   }
   // Using LCM(a,b) = a * b / GCD(a,b)
   return a * (b / GCD(a,b));
+}
+
+int Arithmetic::IMOD(int a, int n) 
+{
+  int x0 = 0;
+  int x1 = 1;
+  int y0 = 1;
+  int y1 = 0;
+  int q, tempx, tempy, c;
+  int b = n;
+  if (Arithmetic::GCD(a, n) != 1) {
+    return 0;
+  }
+  do
+  {
+    c = a;
+    q = (b - (b % a)) / a;
+    a = b % a;
+    b = c;
+
+    tempy = y0;
+    y0 = y1;
+    y1 = tempy - q * y1;
+
+    tempx = x0;
+    x0 = x1;
+    x1 = tempx - q * x1;
+  } while (a != 0);
+
+  int result = x0 % n; // take the result and could be negative, so we add n and it should be positive.
+  if (result < 0) {
+      return result + n;
+  }
+  return result;
 }
 
 Integer getIntegerFromRationalExpression(Expression expression) {
