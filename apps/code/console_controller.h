@@ -38,6 +38,7 @@ public:
   // ViewController
   View * view() override { return &m_selectableTableView; }
   void viewWillAppear() override;
+  void viewDidDisappear() override;
   void didBecomeFirstResponder() override;
   bool handleEvent(Ion::Events::Event event) override;
   ViewController::DisplayParameter displayParameter() override { return ViewController::DisplayParameter::WantsMaximumSpace; }
