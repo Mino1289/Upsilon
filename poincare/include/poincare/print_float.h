@@ -9,7 +9,7 @@ namespace Poincare {
 
 class PrintFloat {
 public:
-  constexpr static int k_numberOfPrintedSignificantDigits = 7;
+  constexpr static int k_numberOfPrintedSignificantDigits = 9;
   constexpr static int k_numberOfStoredSignificantDigits = 14;
   // ᴇ and ℯ are 3 bytes long
   constexpr static int k_specialECodePointByteLength = 3;
