@@ -11,7 +11,7 @@ public:
   static const ScriptTemplate * Empty();
   static const ScriptTemplate * Mathsup();
   const char * name() const { return m_name; }
-  const char * content() const { return m_value + Script::StatusSize() + Script::CursorPositionSize(); }
+  const char * content() const { return m_value; + Script::StatusSize();}
   const char * value() const { return m_value; }
 private:
   const char * m_name;
