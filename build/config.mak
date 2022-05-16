@@ -5,8 +5,8 @@ DEBUG ?= 0
 
 HOME_DISPLAY_EXTERNALS ?= 1
 EPSILON_VERSION ?= 15.5.0
-OMEGA_VERSION ?= 2.0.0
-UPSILON_VERSION ?= 1.0.0-dev
+OMEGA_VERSION ?= 2.0.2
+UPSILON_VERSION ?= 1.0.0
 # OMEGA_USERNAME ?= N/A
 OMEGA_STATE ?= public
 EPSILON_APPS ?= calculation graph code atomic solver reader statistics probability sequence regression settings external

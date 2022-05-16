@@ -26,7 +26,7 @@ namespace USB {
 
 class Calculator : public Device {
 public:
-  static void PollAndReset(bool exitWithKeyboard, bool unlocked, int level)
+  static void PollAndReset(bool exitWithKeyboard)
     __attribute__((section(".dfu_entry_point"))) // Needed to pinpoint this symbol in the linker script
     __attribute__((used)) // Make sure this symbol is not discarded at link time
     ; // Return true if reset is needed
@@ -93,14 +93,14 @@ public:
         &m_webUSBPlatformDescriptor),
     m_languageStringDescriptor(),
     m_manufacturerStringDescriptor("NumWorks"),
-    m_productStringDescriptor("NumWorks Calculator"),
+    m_productStringDescriptor("Upsilon Calculator"),
     m_serialNumberStringDescriptor(serialNumber),
     m_interfaceStringDescriptor(stringDescriptor()),
     //m_interfaceStringDescriptor("@SRAM/0x20000000/01*256Ke"),
     /* Switch to this descriptor to use dfu-util to write in the SRAM.
      * FIXME Should be an alternate Interface. */
     m_microsoftOSStringDescriptor(k_microsoftOSVendorCode),
-    m_workshopURLDescriptor(URLDescriptor::Scheme::HTTPS, "getomega.dev"),
+    m_workshopURLDescriptor(URLDescriptor::Scheme::HTTPS, "getupsilon.web.app"),
     m_extendedCompatIdDescriptor("WINUSB"),
     m_descriptors{
       &m_deviceDescriptor,             // Type = Device, Index = 0
