@@ -17,26 +17,27 @@ constexpr SettingsMessageTree s_modelDateTimeChildren[3] = {SettingsMessageTree(
 constexpr SettingsMessageTree s_symbolChildren[4] = {SettingsMessageTree(I18n::Message::SymbolMultiplicationCross),SettingsMessageTree(I18n::Message::SymbolMultiplicationMiddleDot),SettingsMessageTree(I18n::Message::SymbolMultiplicationStar),SettingsMessageTree(I18n::Message::SymbolMultiplicationAutoSymbol)};
 constexpr SettingsMessageTree s_usbProtectionChildren[2] = {SettingsMessageTree(I18n::Message::USBProtection), SettingsMessageTree(I18n::Message::USBProtectionLevel, s_usbProtectionLevelChildren)};
 constexpr SettingsMessageTree s_usbProtectionLevelChildren[3] = {SettingsMessageTree(I18n::Message::USBDefaultLevel), SettingsMessageTree(I18n::Message::USBLowLevel), SettingsMessageTree(I18n::Message::USBParanoidLevel)};
+constexpr SettingsMessageTree s_externalChildren[2] = {SettingsMessageTree(I18n::Message::ExtAppWrite), SettingsMessageTree(I18n::Message::ExtAppEnabled)};
 constexpr SettingsMessageTree s_symbolFunctionChildren[3] = {SettingsMessageTree(I18n::Message::SymbolDefaultFunction), SettingsMessageTree(I18n::Message::SymbolArgDefaultFunction), SettingsMessageTree(I18n::Message::SymbolArgFunction)};
 constexpr SettingsMessageTree s_modelMathOptionsChildren[6] = {SettingsMessageTree(I18n::Message::AngleUnit, s_modelAngleChildren), SettingsMessageTree(I18n::Message::DisplayMode, s_modelFloatDisplayModeChildren), SettingsMessageTree(I18n::Message::EditionMode, s_modelEditionModeChildren), SettingsMessageTree(I18n::Message::SymbolFunction, s_symbolFunctionChildren), SettingsMessageTree(I18n::Message::ComplexFormat, s_modelComplexFormatChildren), SettingsMessageTree(I18n::Message::SymbolMultiplication, s_symbolChildren)};
+constexpr SettingsMessageTree s_brightnessChildren[4] = {SettingsMessageTree(I18n::Message::Brightness), SettingsMessageTree(I18n::Message::IdleTimeBeforeDimming), SettingsMessageTree(I18n::Message::IdleTimeBeforeSuspend), SettingsMessageTree(I18n::Message::BrightnessShortcut)};
 constexpr SettingsMessageTree s_accessibilityChildren[6] = {SettingsMessageTree(I18n::Message::AccessibilityInvertColors), SettingsMessageTree(I18n::Message::AccessibilityMagnify),SettingsMessageTree(I18n::Message::AccessibilityGamma),SettingsMessageTree(I18n::Message::AccessibilityGammaRed),SettingsMessageTree(I18n::Message::AccessibilityGammaGreen),SettingsMessageTree(I18n::Message::AccessibilityGammaBlue)};
-constexpr SettingsMessageTree s_contributorsChildren[23] = {SettingsMessageTree(I18n::Message::Developers), SettingsMessageTree(I18n::Message::QuentinGuidee), SettingsMessageTree(I18n::Message::JoachimLeFournis), SettingsMessageTree(I18n::Message::MaximeFriess), SettingsMessageTree(I18n::Message::JeanBaptisteBoric), SettingsMessageTree(I18n::Message::SandraSimmons), SettingsMessageTree(I18n::Message::David), SettingsMessageTree(I18n::Message::DamienNicolet), SettingsMessageTree(I18n::Message::EvannDreumont), SettingsMessageTree(I18n::Message::SzaboLevente), SettingsMessageTree(I18n::Message::VenceslasDuet), SettingsMessageTree(I18n::Message::CharlotteThomas), SettingsMessageTree(I18n::Message::AntoninLoubiere), SettingsMessageTree(I18n::Message::CyprienMejat), SettingsMessageTree(I18n::Message::BetaTesters), SettingsMessageTree(I18n::Message::TimeoArnouts), SettingsMessageTree(I18n::Message::JulieC), SettingsMessageTree(I18n::Message::LelahelHideux), SettingsMessageTree(I18n::Message::Madil), SettingsMessageTree(I18n::Message::HilaireLeRoux), SettingsMessageTree(I18n::Message::HectorNussbaumer), SettingsMessageTree(I18n::Message::RaphaelDyda), SettingsMessageTree(I18n::Message::ThibautC)};
+constexpr SettingsMessageTree s_contributorsChildren[18] = {SettingsMessageTree(I18n::Message::LaurianFournier), SettingsMessageTree(I18n::Message::YannCouturier), SettingsMessageTree(I18n::Message::DavidLuca), SettingsMessageTree(I18n::Message::LoicE), SettingsMessageTree(I18n::Message::VictorKretz), SettingsMessageTree(I18n::Message::QuentinGuidee), SettingsMessageTree(I18n::Message::JoachimLeFournis), SettingsMessageTree(I18n::Message::MaximeFriess), SettingsMessageTree(I18n::Message::JeanBaptisteBoric), SettingsMessageTree(I18n::Message::SandraSimmons), SettingsMessageTree(I18n::Message::David), SettingsMessageTree(I18n::Message::DamienNicolet), SettingsMessageTree(I18n::Message::EvannDreumont), SettingsMessageTree(I18n::Message::SzaboLevente), SettingsMessageTree(I18n::Message::VenceslasDuet), SettingsMessageTree(I18n::Message::CharlotteThomas), SettingsMessageTree(I18n::Message::AntoninLoubiere), SettingsMessageTree(I18n::Message::CyprienMejat)};
 
 // Code Settings
 #ifdef HAS_CODE
-constexpr SettingsMessageTree s_codeChildren[3] = {SettingsMessageTree(I18n::Message::FontSizes, s_modelFontChildren), SettingsMessageTree(I18n::Message::Autocomplete), SettingsMessageTree(I18n::Message::SyntaxHighlighting)};
+constexpr SettingsMessageTree s_codeChildren[4] = {SettingsMessageTree(I18n::Message::FontSizes, s_modelFontChildren), SettingsMessageTree(I18n::Message::Autocomplete), SettingsMessageTree(I18n::Message::SyntaxHighlighting), SettingsMessageTree(I18n::Message::CursorSaving)};
 #endif
 constexpr SettingsMessageTree s_modelFontChildren[2] = {SettingsMessageTree(I18n::Message::LargeFont), SettingsMessageTree(I18n::Message::SmallFont)};
 
-
-constexpr SettingsMessageTree s_modelAboutChildren[9] = {SettingsMessageTree(I18n::Message::Username), SettingsMessageTree(I18n::Message::SoftwareVersion), SettingsMessageTree(I18n::Message::UpsilonVersion), SettingsMessageTree(I18n::Message::MicroPythonVersion), SettingsMessageTree(I18n::Message::Battery), SettingsMessageTree(I18n::Message::MemUse), SettingsMessageTree(I18n::Message::SerialNumber), SettingsMessageTree(I18n::Message::FccId), SettingsMessageTree(I18n::Message::Contributors, s_contributorsChildren)};
+constexpr SettingsMessageTree s_modelAboutChildren[10] = {SettingsMessageTree(I18n::Message::Username), SettingsMessageTree(I18n::Message::UpsilonVersion), SettingsMessageTree(I18n::Message::OmegaVersion), SettingsMessageTree(I18n::Message::SoftwareVersion), SettingsMessageTree(I18n::Message::MicroPythonVersion), SettingsMessageTree(I18n::Message::Battery), SettingsMessageTree(I18n::Message::MemUse), SettingsMessageTree(I18n::Message::SerialNumber), SettingsMessageTree(I18n::Message::FccId), SettingsMessageTree(I18n::Message::Contributors, s_contributorsChildren)};
 
 MainController::MainController(Responder * parentResponder, InputEventHandlerDelegate * inputEventHandlerDelegate) :
   ViewController(parentResponder),
-  m_brightnessCell(I18n::Message::Default, KDFont::LargeFont),
   m_popUpCell(I18n::Message::Default, KDFont::LargeFont),
   m_selectableTableView(this),
   m_mathOptionsController(this, inputEventHandlerDelegate),
+  m_brightnessController(this, inputEventHandlerDelegate),
   m_localizationController(this, Metric::CommonTopMargin, LocalizationController::Mode::Language),
   m_accessibilityController(this),
   m_dateTimeController(this),
@@ -44,7 +45,7 @@ MainController::MainController(Responder * parentResponder, InputEventHandlerDel
   m_examModeController(this),
   m_aboutController(this),
   m_preferencesController(this),
-  m_usbInfoController(this)
+  m_externalController(this)
 {
   for (int i = 0; i < k_numberOfSimpleChevronCells; i++) {
     m_cells[i].setMessageFont(KDFont::LargeFont);
@@ -64,27 +65,10 @@ void MainController::didBecomeFirstResponder() {
 
 bool MainController::handleEvent(Ion::Events::Event event) {
   GlobalPreferences * globalPreferences = GlobalPreferences::sharedGlobalPreferences();
-  if (event == Ion::Events::BrightnessPlus || event == Ion::Events::BrightnessMinus){
-    int delta = Ion::Backlight::MaxBrightness/GlobalPreferences::NumberOfBrightnessStates;
-    int direction = (event == Ion::Events::BrightnessPlus) ? Ion::Backlight::NumberOfStepsPerShortcut*delta : -delta*Ion::Backlight::NumberOfStepsPerShortcut;
-    GlobalPreferences::sharedGlobalPreferences()->setBrightnessLevel(GlobalPreferences::sharedGlobalPreferences()->brightnessLevel()+direction);
-    m_selectableTableView.reloadCellAtLocation(m_selectableTableView.selectedColumn(), 1);
-    return true;
-  }
   if (model()->childAtIndex(selectedRow())->numberOfChildren() == 0) {
     if (model()->childAtIndex(selectedRow())->label() == promptMessage()) {
       if (event == Ion::Events::OK || event == Ion::Events::EXE || event == Ion::Events::Right) {
         globalPreferences->setShowPopUp(!globalPreferences->showPopUp());
-        m_selectableTableView.reloadCellAtLocation(m_selectableTableView.selectedColumn(), m_selectableTableView.selectedRow());
-        return true;
-      }
-      return false;
-    }
-    if (model()->childAtIndex(selectedRow())->label() == I18n::Message::Brightness) {
-      if (event == Ion::Events::Right || event == Ion::Events::Left || event == Ion::Events::Plus || event == Ion::Events::Minus) {
-        int delta = Ion::Backlight::MaxBrightness/GlobalPreferences::NumberOfBrightnessStates;
-        int direction = (event == Ion::Events::Right || event == Ion::Events::Plus) ? delta : -delta;
-        globalPreferences->setBrightnessLevel(globalPreferences->brightnessLevel()+direction);
         m_selectableTableView.reloadCellAtLocation(m_selectableTableView.selectedColumn(), m_selectableTableView.selectedRow());
         return true;
       }
@@ -108,16 +92,18 @@ bool MainController::handleEvent(Ion::Events::Event event) {
       subController = &m_examModeController;
     } else if (title == I18n::Message::About) {
       subController = &m_aboutController;
+    } else if (title == I18n::Message::BrightnessSettings) {
+      subController = &m_brightnessController;
     } else if (title == I18n::Message::Accessibility) {
       subController = &m_accessibilityController;
     } else if (title == I18n::Message::DateTime) {
       subController = &m_dateTimeController;
     } else if (title == I18n::Message::MathOptions) {
       subController = &m_mathOptionsController;
-    } else if (title == I18n::Message::UsbSetting) {
-      subController = &m_usbInfoController;
     } else if (title == I18n::Message::CodeApp) {
       subController = &m_codeOptionsController;
+    } else if (title == I18n::Message::ExternalApps) {
+      subController = &m_externalController;
     } else {
       subController = &m_preferencesController;
     }
@@ -141,11 +127,7 @@ KDCoordinate MainController::rowHeight(int j) {
 }
 
 KDCoordinate MainController::cumulatedHeightFromIndex(int j) {
-  KDCoordinate height = j * rowHeight(0);
-  if (j > k_indexOfBrightnessCell) {
-    height += CellWithSeparator::k_margin;
-  }
-  return height;
+  return j * rowHeight(0);
 }
 
 int MainController::indexFromCumulatedHeight(KDCoordinate offsetY) {
@@ -162,11 +144,8 @@ HighlightCell * MainController::reusableCell(int index, int type) {
     return &m_cells[index];
   }
   assert(index == 0);
-  if (type == 2) {
-    return &m_popUpCell;
-  }
-  assert(type == 1);
-  return &m_brightnessCell;
+  assert(type == 2);
+  return &m_popUpCell;
 }
 
 int MainController::reusableCellCount(int type) {

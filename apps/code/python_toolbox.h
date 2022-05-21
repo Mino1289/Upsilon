@@ -20,10 +20,12 @@ public:
   const ToolboxMessageTree * rootModel() const override;
 protected:
   KDCoordinate rowHeight(int j) override;
-  bool selectLeaf(int selectedRow) override;
+  bool selectLeaf(int selectedRow, bool quitToolbox) override;
+  bool selectSubMenu(int selectedRow) override;
   MessageTableCellWithMessage * leafCellAtIndex(int index) override;
   MessageTableCellWithChevron* nodeCellAtIndex(int index) override;
   int maxNumberOfDisplayedRows() override;
+  bool canStayInMenu() override { return true; }
   constexpr static int k_maxNumberOfDisplayedRows = 13; // = 240/(13+2*3)
   // 13 = minimal string height size
   // 3 = vertical margins
@@ -33,7 +35,7 @@ private:
   void scrollToAndSelectChild(int i);
   MessageTableCellWithMessage m_leafCells[k_maxNumberOfDisplayedRows];
   MessageTableCellWithChevron m_nodeCells[k_maxNumberOfDisplayedRows];
-  toolboxIonKeys m_ionKeys;
+  ToolboxIonKeys m_ionKeys;
 };
 
 }

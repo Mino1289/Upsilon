@@ -12,9 +12,9 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
-#include <py/obj.h>
-#include <py/runtime.h>
-#include <py/misc.h>
+#include "py/obj.h"
+#include "py/runtime.h"
+#include "py/misc.h"
 #include "user.h"
 
 #if ULAB_HAS_USER_MODULE
@@ -74,7 +74,7 @@ static mp_obj_t user_square(mp_obj_t arg) {
             *rarray++ = (*array) * (*array);
         }
     }
-    // at the end, return a micrppython object
+    // at the end, return a micropython object
     return MP_OBJ_FROM_PTR(results);
 }
 

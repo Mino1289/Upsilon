@@ -14,6 +14,7 @@ py_src = $(addprefix python/src/py/,\
   nlrx86.c \
   nlrx64.c \
   nlrthumb.c \
+  nlraarch64.c \
   nlrpowerpc.c \
   nlrxtensa.c \
   nlrsetjmp.c \
@@ -55,6 +56,7 @@ py_src = $(addprefix python/src/py/,\
   runtime_utils.c \
   scheduler.c \
   nativeglue.c \
+  pairheap.c \
   ringbuf.c \
   stackctrl.c \
   argcheck.c \
@@ -167,19 +169,20 @@ port_src += $(addprefix python/port/,\
   mod/ulab/ulab_tools.c \
   mod/ulab/ndarray.c \
   mod/ulab/ndarray_properties.c \
-  mod/ulab/numpy/approx/approx.c \
-  mod/ulab/numpy/compare/compare.c \
+  mod/ulab/numpy/approx.c \
+  mod/ulab/numpy/compare.c \
   mod/ulab/ulab_create.c \
   mod/ulab/numpy/fft/fft.c \
   mod/ulab/numpy/fft/fft_tools.c \
-  mod/ulab/numpy/filter/filter.c \
+  mod/ulab/numpy/filter.c \
   mod/ulab/numpy/linalg/linalg.c \
   mod/ulab/numpy/linalg/linalg_tools.c \
-  mod/ulab/numpy/numerical/numerical.c \
-  mod/ulab/numpy/poly/poly.c \
-  mod/ulab/numpy/stats/stats.c \
-  mod/ulab/numpy/transform/transform.c \
-  mod/ulab/numpy/vector/vector.c \
+  mod/ulab/numpy/ndarray/ndarray_iter.c \
+  mod/ulab/numpy/numerical.c \
+  mod/ulab/numpy/poly.c \
+  mod/ulab/numpy/stats.c \
+  mod/ulab/numpy/transform.c \
+  mod/ulab/numpy/vector.c \
   mod/ulab/numpy/numpy.c \
   mod/ulab/scipy/scipy.c \
   mod/ulab/user/user.c \
@@ -196,6 +199,13 @@ endif
 # by DMP_QSTR_random.
 $(call object_for,python/src/py/objmodule.c): SFLAGS += -DMP_QSTR_urandom="MP_QSTR_random"
 $(call object_for,python/src/extmod/modurandom.c): SFLAGS += -DMP_QSTR_urandom="MP_QSTR_random"
+
+# Rename usys to sys
+# In order to change the name of the micropython module 'usys' to 'sys'
+# (without altering micropython files), we redefined the macro MP_QSTR_usys
+# by DMP_QSTR_sys.
+$(call object_for,python/src/py/objmodule.c): SFLAGS += -DMP_QSTR_usys="MP_QSTR_sys"
+$(call object_for,python/src/extmod/modusys.c): SFLAGS += -DMP_QSTR_usys="MP_QSTR_sys"
 
 # Handle upward-growing stack
 # Some platforms such as emscripten have a stack that grows up. We've rewritten

@@ -12,7 +12,8 @@
 #include "sub_menu/localization_controller.h"
 #include "sub_menu/math_options_controller.h"
 #include "sub_menu/preferences_controller.h"
-#include "sub_menu/usb_protection_controller.h"
+#include "sub_menu/external_controller.h"
+#include "sub_menu/brightness_controller.h"
 
 namespace Settings {
 
@@ -24,13 +25,15 @@ extern const Shared::SettingsMessageTree s_symbolChildren[4];
 extern const Shared::SettingsMessageTree s_symbolFunctionChildren[3];
 extern const Shared::SettingsMessageTree s_modelMathOptionsChildren[6];
 extern const Shared::SettingsMessageTree s_modelFontChildren[2];
-extern const Shared::SettingsMessageTree s_codeChildren[3];
+extern const Shared::SettingsMessageTree s_codeChildren[4];
 extern const Shared::SettingsMessageTree s_modelDateTimeChildren[3];
 extern const Shared::SettingsMessageTree s_accessibilityChildren[6];
-extern const Shared::SettingsMessageTree s_contributorsChildren[23];
-extern const Shared::SettingsMessageTree s_modelAboutChildren[9];
+extern const Shared::SettingsMessageTree s_contributorsChildren[18];
+extern const Shared::SettingsMessageTree s_modelAboutChildren[10];
 extern const Shared::SettingsMessageTree s_usbProtectionChildren[2];
 extern const Shared::SettingsMessageTree s_usbProtectionLevelChildren[3];
+extern const Shared::SettingsMessageTree s_externalChildren[2];
+extern const Shared::SettingsMessageTree s_brightnessChildren[4];
 extern const Shared::SettingsMessageTree s_model;
 
 class MainController : public ViewController, public ListViewDataSource, public SelectableTableViewDataSource {
@@ -66,12 +69,12 @@ private:
   StackViewController * stackController() const;
   I18n::Message promptMessage() const;
   bool hasPrompt() const { return promptMessage() != I18n::Message::Default; }
-  constexpr static int k_numberOfSimpleChevronCells = 9;
+  constexpr static int k_numberOfSimpleChevronCells = 10;
   MessageTableCellWithChevronAndMessage m_cells[k_numberOfSimpleChevronCells];
-  MessageTableCellWithGaugeWithSeparator m_brightnessCell;
   MessageTableCellWithSwitch m_popUpCell;
   SelectableTableView m_selectableTableView;
   MathOptionsController m_mathOptionsController;
+  BrightnessController m_brightnessController;
   LocalizationController m_localizationController;
   AccessibilityController m_accessibilityController;
   DateTimeController m_dateTimeController;
@@ -79,7 +82,7 @@ private:
   ExamModeController m_examModeController;
   AboutController m_aboutController;
   PreferencesController m_preferencesController;
-  UsbInfoController m_usbInfoController;
+  ExternalController m_externalController;
 };
 
 }

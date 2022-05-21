@@ -233,7 +233,7 @@ TreeHandle TreeHandle::BuildWithGhostChildren(TreeNode * node) {
   assert(node != nullptr);
   TreePool * pool = TreePool::sharedPool();
   int expectedNumberOfChildren = node->numberOfChildren();
-  /* Ensure the pool is syntaxically correct by creating ghost children for
+  /* Ensure the pool is syntactically correct by creating ghost children for
    * nodes that have a fixed, non-zero number of children. */
   for (int i = 0; i < expectedNumberOfChildren; i++) {
     GhostNode * ghost = new (pool->alloc(sizeof(GhostNode))) GhostNode();
@@ -375,6 +375,7 @@ template VectorCross TreeHandle::FixedArityBuilder<VectorCross, VectorCrossNode>
 template VectorDot TreeHandle::FixedArityBuilder<VectorDot, VectorDotNode>(const Tuple &);
 template VectorNorm TreeHandle::FixedArityBuilder<VectorNorm, VectorNormNode>(const Tuple &);
 template VectorNormLayout TreeHandle::FixedArityBuilder<VectorNormLayout, VectorNormLayoutNode>(const Tuple &);
+template VectorLayout TreeHandle::FixedArityBuilder<VectorLayout, VectorLayoutNode>(const Tuple &);
 template MatrixLayout TreeHandle::NAryBuilder<MatrixLayout, MatrixLayoutNode>(const Tuple &);
 
 }

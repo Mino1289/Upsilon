@@ -16,16 +16,26 @@ CalculationStore::CalculationStore(char * buffer, int size) :
   m_buffer(buffer),
   m_bufferSize(size),
   m_calculationAreaEnd(m_buffer),
-  m_numberOfCalculations(0)
+  m_numberOfCalculations(0),
+  m_trashIndex(-1)
 {
   assert(m_buffer != nullptr);
   assert(m_bufferSize > 0);
 }
 
-// Returns an expiring pointer to the calculation of index i
+// Returns an expiring pointer to the calculation of index i, and ignore the trash
 ExpiringPointer<Calculation> CalculationStore::calculationAtIndex(int i) {
+  if (m_trashIndex == -1 || i < m_trashIndex) {
+    return realCalculationAtIndex(i);
+  } else {
+    return realCalculationAtIndex(i + 1);
+  }
+}
+
+// Returns an expiring pointer to the real calculation of index i
+ExpiringPointer<Calculation> CalculationStore::realCalculationAtIndex(int i) {
   assert(i >= 0 && i < m_numberOfCalculations);
-  // m_buffer is the adress of the oldest calculation in calculation store
+  // m_buffer is the address of the oldest calculation in calculation store
   Calculation * c = (Calculation *) m_buffer;
   if (i != m_numberOfCalculations-1) {
     // The calculation we want is not the oldest one so we get its pointer
@@ -36,12 +46,13 @@ ExpiringPointer<Calculation> CalculationStore::calculationAtIndex(int i) {
 
 // Pushes an expression in the store
 ExpiringPointer<Calculation> CalculationStore::push(const char * text, Context * context, HeightComputer heightComputer) {
+  emptyTrash();
   /* Compute ans now, before the buffer is updated and before the calculation
    * might be deleted */
   Expression ans = ansExpression(context);
 
   /* Prepare the buffer for the new calculation
-   *The minimal size to store the new calculation is the minimal size of a calculation plus the pointer to its end */
+   * The minimal size to store the new calculation is the minimal size of a calculation plus the pointer to its end */
   int minSize = Calculation::MinimalSize() + sizeof(Calculation *);
   assert(m_bufferSize > minSize);
   while (remainingBufferSize() < minSize) {
@@ -100,9 +111,9 @@ ExpiringPointer<Calculation> CalculationStore::push(const char * text, Context *
         numberOfSignificantDigits = Poincare::Preferences::sharedPreferences()->numberOfSignificantDigits();
       }
       if (!pushSerializeExpression(outputs[i], beginingOfFreeSpace, &endOfFreeSpace, numberOfSignificantDigits)) {
-        /* If the exat/approximate output does not fit in the store (event if the
+        /* If the exact/approximate output does not fit in the store (event if the
          * current calculation is the only calculation), replace the output with
-         * undef if it fits, else replace the whole calcualtion with undef. */
+         * undef if it fits, else replace the whole calculation with undef. */
         Expression undef = Undefined::Builder();
         if (!pushSerializeExpression(undef, beginingOfFreeSpace, &endOfFreeSpace)) {
           return emptyStoreAndPushUndef(context, heightComputer);
@@ -132,15 +143,23 @@ ExpiringPointer<Calculation> CalculationStore::push(const char * text, Context *
 
 // Delete the calculation of index i
 void CalculationStore::deleteCalculationAtIndex(int i) {
+  if (m_trashIndex != -1) {
+    emptyTrash();
+  }
+  m_trashIndex = i;
+}
+
+// Delete the calculation of index i, internal algorithm
+void CalculationStore::realDeleteCalculationAtIndex(int i) {
   assert(i >= 0 && i < m_numberOfCalculations);
   if (i == 0) {
-    ExpiringPointer<Calculation> lastCalculationPointer = calculationAtIndex(0);
+    ExpiringPointer<Calculation> lastCalculationPointer = realCalculationAtIndex(0);
     m_calculationAreaEnd = (char *)(lastCalculationPointer.pointer());
     m_numberOfCalculations--;
     return;
   }
-  char * calcI = (char *)calculationAtIndex(i).pointer();
-  char * nextCalc = (char *) calculationAtIndex(i-1).pointer();
+  char * calcI = (char *)realCalculationAtIndex(i).pointer();
+  char * nextCalc = (char *) realCalculationAtIndex(i-1).pointer();
   assert(m_calculationAreaEnd >= nextCalc);
   size_t slidingSize = m_calculationAreaEnd - nextCalc;
   // Slide the i-1 most recent calculations right after the i+1'th
@@ -154,13 +173,14 @@ void CalculationStore::deleteCalculationAtIndex(int i) {
 // Delete the oldest calculation in the store and returns the amount of space freed by the operation
 size_t CalculationStore::deleteOldestCalculation() {
   char * oldBufferEnd = (char *) m_calculationAreaEnd;
-  deleteCalculationAtIndex(numberOfCalculations()-1);
+  realDeleteCalculationAtIndex(numberOfCalculations()-1);
   char * newBufferEnd = (char *) m_calculationAreaEnd;
   return oldBufferEnd - newBufferEnd;
 }
 
 // Delete all calculations
 void CalculationStore::deleteAll() {
+  m_trashIndex = -1;
   m_calculationAreaEnd = m_buffer;
   m_numberOfCalculations = 0;
 }
@@ -177,8 +197,8 @@ Expression CalculationStore::ansExpression(Context * context) {
    * parsed), ans is replaced by the approximation output when any Store or
    * Equal expression appears. */
   Expression e = mostRecentCalculation->exactOutput();
-  bool exactOuptutInvolvesStoreEqual = e.type() == ExpressionNode::Type::Store || e.type() == ExpressionNode::Type::Equal;
-  if (mostRecentCalculation->input().recursivelyMatches(Expression::IsApproximate, context) || exactOuptutInvolvesStoreEqual) {
+  bool exactOutputInvolvesStoreEqual = e.type() == ExpressionNode::Type::Store || e.type() == ExpressionNode::Type::Equal;
+  if (mostRecentCalculation->input().recursivelyMatches(Expression::IsApproximate, context) || exactOutputInvolvesStoreEqual) {
     return mostRecentCalculation->approximateOutput(context, Calculation::NumberOfSignificantDigits::Maximal);
   }
   return mostRecentCalculation->exactOutput();
@@ -200,6 +220,12 @@ bool CalculationStore::pushSerializeExpression(Expression e, char * location, ch
   return expressionIsPushed;
 }
 
+void CalculationStore::emptyTrash() {
+  if (m_trashIndex != -1) {
+    realDeleteCalculationAtIndex(m_trashIndex);
+    m_trashIndex = -1;
+  }
+}
 
 
 Shared::ExpiringPointer<Calculation> CalculationStore::emptyStoreAndPushUndef(Context * context, HeightComputer heightComputer) {
@@ -213,7 +239,7 @@ Shared::ExpiringPointer<Calculation> CalculationStore::emptyStoreAndPushUndef(Co
 void CalculationStore::recomputeMemoizedPointersAfterCalculationIndex(int index) {
   assert(index < m_numberOfCalculations);
   // Clear pointer and recompute new ones
-  Calculation * c = calculationAtIndex(index).pointer();
+  Calculation * c = realCalculationAtIndex(index).pointer();
   Calculation * nextCalc;
   while (index != 0) {
     nextCalc = c->next();

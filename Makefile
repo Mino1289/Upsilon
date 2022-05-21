@@ -27,10 +27,15 @@ ifeq (${MODEL}, n0100)
   endif
 endif
 
-ifeq (${MODEL}, n0110)
-  apps_list = ${EPSILON_APPS}
+ifeq ($(filter reader,$(apps_list)),)
+  HAS_READER := 1
+endif
+
+# Remove the external apps for the n0100
+ifeq (${MODEL}, n0100)
+    apps_list = $(foreach i, ${EPSILON_APPS}, $(if $(filter external, $(i)),,$(i)))
 else
-  apps_list = $(foreach i, ${EPSILON_APPS}, $(if $(filter external, $(i)),,$(i)))
+    apps_list = ${EPSILON_APPS}
 endif
 
 ifdef FORCE_EXTERNAL
@@ -101,7 +106,7 @@ print-%:
 	@echo $*\'s origin is $(origin $*)
 
 # Since we're building out-of-tree, we need to make sure the output directories
-# are created, otherwise the receipes will fail (e.g. gcc will fail to create
+# are created, otherwise the recipes will fail (e.g. gcc will fail to create
 # "output/foo/bar.o" because the directory "output/foo" doesn't exist).
 # We need to mark those directories as precious, otherwise Make will try to get
 # rid of them upon completion (and fail, since those folders won't be empty).
@@ -133,6 +138,7 @@ include poincare/Makefile
 include python/Makefile
 include escher/Makefile
 # Executable Makefiles
+include bootloader/Makefile
 include apps/Makefile
 include build/struct_layout/Makefile
 include build/scenario/Makefile
@@ -205,3 +211,13 @@ clean_run: cleanandcompile
 .PHONY: run
 run: compile
 	${MAKE} start
+
+.PHONY: translations
+translations:
+	@echo "TRANSLATIONS"
+	$(Q) ${PYTHON} build/utilities/translate.py
+
+.PHONY: translations_clean
+translations_clean:
+	@echo "TRANSLATIONS CLEAN"
+	$(Q) ${PYTHON} build/utilities/translations_clean.py

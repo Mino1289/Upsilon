@@ -75,6 +75,7 @@ const ToolboxMessageTree MathModuleChildren[] = {
   ToolboxMessageTree::Leaf(I18n::Message::PythonCommandAtan2, I18n::Message::PythonAtan2),
   ToolboxMessageTree::Leaf(I18n::Message::PythonCommandCeil, I18n::Message::PythonCeil),
   ToolboxMessageTree::Leaf(I18n::Message::PythonCommandCopySign, I18n::Message::PythonCopySign),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandFactorial, I18n::Message::PythonFactorial),
   ToolboxMessageTree::Leaf(I18n::Message::PythonCommandFabs, I18n::Message::PythonFabs),
   ToolboxMessageTree::Leaf(I18n::Message::PythonCommandFloor, I18n::Message::PythonFloor),
   ToolboxMessageTree::Leaf(I18n::Message::PythonCommandFmod, I18n::Message::PythonFmod),
@@ -365,18 +366,72 @@ const ToolboxMessageTree KandinskyModuleChildren[] = {
   ToolboxMessageTree::Leaf(I18n::Message::PythonCommandFillRect, I18n::Message::PythonFillRect),
   ToolboxMessageTree::Leaf(I18n::Message::PythonCommandFillCircle, I18n::Message::PythonFillCircle),
   ToolboxMessageTree::Leaf(I18n::Message::PythonCommandFillPolygon, I18n::Message::PythonFillPolygon),
-  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandGetKeys, I18n::Message::PythonGetKeys),
-  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandGetPalette, I18n::Message::PythonGetPalette)};
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandGetPalette, I18n::Message::PythonGetPalette)
+};
+
+const ToolboxMessageTree IonKeyModuleChildren[] = {
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyLeft, I18n::Message::PythonKeyLeft, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyUp, I18n::Message::PythonKeyUp, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyDown, I18n::Message::PythonKeyDown, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyRight, I18n::Message::PythonKeyRight, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyOk, I18n::Message::PythonKeyOk, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyBack, I18n::Message::PythonKeyBack, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyHome, I18n::Message::PythonKeyHome, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyOnOff, I18n::Message::PythonKeyOnOff, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyShift, I18n::Message::PythonKeyShift, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyAlpha, I18n::Message::PythonKeyAlpha, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyXnt, I18n::Message::PythonKeyXnt, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyVar, I18n::Message::PythonKeyVar, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyToolbox, I18n::Message::PythonKeyToolbox, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyBackspace, I18n::Message::PythonKeyBackspace, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyExp, I18n::Message::PythonKeyExp, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyLn, I18n::Message::PythonKeyLn, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyLog, I18n::Message::PythonKeyLog, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyImaginary, I18n::Message::PythonKeyImaginary, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyComma, I18n::Message::PythonKeyComma, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyPower, I18n::Message::PythonKeyPower, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeySine, I18n::Message::PythonKeySine, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyCosine, I18n::Message::PythonKeyCosine, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyTangent, I18n::Message::PythonKeyTangent, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyPi, I18n::Message::PythonKeyPi, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeySqrt, I18n::Message::PythonKeySqrt, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeySquare, I18n::Message::PythonKeySquare, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeySeven, I18n::Message::PythonKeySeven, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyEight, I18n::Message::PythonKeyEight, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyNine, I18n::Message::PythonKeyNine, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyLeftParenthesis, I18n::Message::PythonKeyLeftParenthesis, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyRightParenthesis, I18n::Message::PythonKeyRightParenthesis, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyFour, I18n::Message::PythonKeyFour, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyFive, I18n::Message::PythonKeyFive, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeySix, I18n::Message::PythonKeySix, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyMultiplication, I18n::Message::PythonKeyMultiplication, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyDivision, I18n::Message::PythonKeyDivision, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyOne, I18n::Message::PythonKeyOne, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyTwo, I18n::Message::PythonKeyTwo, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyThree, I18n::Message::PythonKeyThree, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyPlus, I18n::Message::PythonKeyPlus, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyMinus, I18n::Message::PythonKeyMinus, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyZero, I18n::Message::PythonKeyZero, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyDot, I18n::Message::PythonKeyDot, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyEe, I18n::Message::PythonKeyEe, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyAns, I18n::Message::PythonKeyAns, false),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandKeyExe, I18n::Message::PythonKeyExe, false)
+};
 
 const ToolboxMessageTree IonModuleChildren[] = {
   ToolboxMessageTree::Leaf(I18n::Message::PythonCommandImportIon, I18n::Message::PythonImportIon, false),
   ToolboxMessageTree::Leaf(I18n::Message::PythonCommandImportFromIon, I18n::Message::PythonImportIon, false),
   ToolboxMessageTree::Leaf(I18n::Message::PythonCommandIonFunction, I18n::Message::PythonIonFunction, false, I18n::Message::PythonCommandIonFunctionWithoutArg),
   ToolboxMessageTree::Leaf(I18n::Message::PythonCommandIsKeyDown, I18n::Message::PythonIsKeyDown),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandGetKeys, I18n::Message::PythonGetKeys),
   ToolboxMessageTree::Leaf(I18n::Message::PythonCommandBattery, I18n::Message::PythonBattery),
   ToolboxMessageTree::Leaf(I18n::Message::PythonCommandBatteryLevel, I18n::Message::PythonBatteryLevel),
   ToolboxMessageTree::Leaf(I18n::Message::PythonCommandBatteryIscharging, I18n::Message::PythonBatteryIscharging),
-  ToolboxMessageTree::Leaf(I18n::Message::IonSelector, I18n::Message::IonSelector)
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandSetBrightness, I18n::Message::PythonSetBrightness),
+  ToolboxMessageTree::Leaf(I18n::Message::PythonCommandGetBrightness, I18n::Message::PythonGetBrightness),
+  // This is a special case, because it is handled separately, so the sub-tree is unused.
+  ToolboxMessageTree::Node(I18n::Message::IonSelector, IonKeyModuleChildren),
+  ToolboxMessageTree::Node(I18n::Message::IonKeyList, IonKeyModuleChildren)
 };
 
 const ToolboxMessageTree TimeModuleChildren[] = {
@@ -403,6 +458,7 @@ const ToolboxMessageTree OsModuleChildren[] = {
   ToolboxMessageTree::Leaf(I18n::Message::PythonOsCommandListdir, I18n::Message::PythonOsListdir, false)
 };
 
+#if MICROPY_PY_SYS
 const ToolboxMessageTree SysModuleChildren[] = {
   ToolboxMessageTree::Leaf(I18n::Message::PythonCommandImportSys, I18n::Message::PythonImportSys, false),
   ToolboxMessageTree::Leaf(I18n::Message::PythonCommandImportFromSys, I18n::Message::PythonImportSys, false),
@@ -414,6 +470,7 @@ const ToolboxMessageTree SysModuleChildren[] = {
   ToolboxMessageTree::Leaf(I18n::Message::PythonSysCommandVersion, I18n::Message::PythonSysVersion, false),
   ToolboxMessageTree::Leaf(I18n::Message::PythonSysCommandVersioninfo, I18n::Message::PythonSysVersioninfo, false)
 };
+#endif
 
 const ToolboxMessageTree modulesChildren[] = {
   ToolboxMessageTree::Node(I18n::Message::MathModule, MathModuleChildren),
@@ -427,7 +484,9 @@ const ToolboxMessageTree modulesChildren[] = {
   ToolboxMessageTree::Node(I18n::Message::KandinskyModule, KandinskyModuleChildren),
   ToolboxMessageTree::Node(I18n::Message::IonModule, IonModuleChildren),
   ToolboxMessageTree::Node(I18n::Message::OsModule, OsModuleChildren),
+#if MICROPY_PY_SYS
   ToolboxMessageTree::Node(I18n::Message::SysModule, SysModuleChildren),
+#endif
   ToolboxMessageTree::Node(I18n::Message::TimeModule, TimeModuleChildren)
 };
 
@@ -692,19 +751,13 @@ KDCoordinate PythonToolbox::rowHeight(int j) {
   return Toolbox::rowHeight(j);
 }
 
-bool PythonToolbox::selectLeaf(int selectedRow) {
+bool PythonToolbox::selectLeaf(int selectedRow, bool quitToolbox) {
   ToolboxMessageTree * node = (ToolboxMessageTree *)m_messageTreeModel->childAtIndex(selectedRow);
 #if defined(INCLUDE_ULAB)
   if(node->text() == I18n::Message::UlabDocumentationLink){
     return true;
   }
 #endif
-  m_selectableTableView.deselectTable();
-  if(node->insertedText() == I18n::Message::IonSelector){
-    m_ionKeys.setSender(sender());
-    Container::activeApp()->displayModalViewController(static_cast<ViewController*>(&m_ionKeys), 0.f, 0.f, Metric::PopUpTopMargin, Metric::PopUpLeftMargin, 0, Metric::PopUpRightMargin);
-    return true;
-  }
   const char * editedText = I18n::translate(node->insertedText());
   // strippedEditedText array needs to be in the same scope as editedText
   char strippedEditedText[k_maxMessageSize];
@@ -715,9 +768,24 @@ bool PythonToolbox::selectLeaf(int selectedRow) {
     editedText = strippedEditedText;
   }
   sender()->handleEventWithText(editedText, true);
-  Container::activeApp()->dismissModalViewController();
+  if (quitToolbox) {
+    m_selectableTableView.deselectTable();
+    Container::activeApp()->dismissModalViewController();
+  }
   return true;
 }
+
+// This is the same function as in the Toolbox class, but we need to override it because we need to handle the Key selector differently.
+bool PythonToolbox::selectSubMenu(int selectedRow) {
+  // If the selected row is a is the Key selector, we display the IonKeySelectorViewController
+  if (m_messageTreeModel->childAtIndex(selectedRow)->label() == I18n::Message::IonSelector) {
+    m_ionKeys.setSender(sender());
+    Container::activeApp()->displayModalViewController(static_cast<ViewController*>(&m_ionKeys), 0.f, 0.f, Metric::PopUpTopMargin, Metric::PopUpLeftMargin, 0, Metric::PopUpRightMargin);
+    return true;
+  }
+  return Toolbox::selectSubMenu(selectedRow);
+}
+
 
 const ToolboxMessageTree * PythonToolbox::rootModel() const {
   return &toolboxModel;

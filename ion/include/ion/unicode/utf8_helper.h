@@ -19,17 +19,17 @@ private:
   bool m_removeParenthesesExtention;
 };
 
-// Returns the number of occurences of a code point in a string
+// Returns the number of occurrences of a code point in a string
 int CountOccurrences(const char * s, CodePoint c);
 
-/* Returns the first occurence of a code point in a string, the position of the
+/* Returns the first occurrence of a code point in a string, the position of the
  * null terminating char otherwise. */
 const char * CodePointSearch(const char * s, CodePoint c, const char * stoppingPosition = nullptr);
 
 // Returns true if the text had the code point
 bool HasCodePoint(const char * s, CodePoint c, const char * stoppingPosition = nullptr);
 
-/* Returns the first occurence of a code point that is not c in a string,
+/* Returns the first occurrence of a code point that is not c in a string,
  * stopping at the null-terminating char or the start of string. */
 const char * NotCodePointSearch(const char * s, CodePoint c, bool goingLeft = false, const char * initialPosition = nullptr);
 
@@ -41,9 +41,9 @@ bool CopyAndRemoveCodePoints(char * dst, size_t dstSize, const char * src, CodeP
  * points where removed before it. Ensure null-termination of dst. */
 void RemoveCodePoint(char * buffer, CodePoint c, const char * * indexToUpdate = nullptr, const char * stoppingPosition = nullptr);
 
-/* Slides a string by a number of chars. If slidingSize < 0, the string is slided
+/* Slides a string by a number of chars. If slidingSize < 0, the string is slid
  * to the left losing the first chars. Returns true if successful.
- * Exemples :
+ * Examples :
  * SlideStringByNumberOfChar("12345", 2, 7) gives "1212345"
  * SlideStringByNumberOfChar("12345", 2, 5) gives "12123"
  * SlideStringByNumberOfChar("12345", -2, 5) gives "34545"*/
@@ -120,6 +120,7 @@ size_t StringGlyphLength(const char * s, int maxSize = -1);
 const char * BeginningOfWord(const char * text, const char * word);
 // Returns the position of the first following char ' ', '\n' or 0
 const char * EndOfWord(const char * word);
+const char * EndOfWord(const char * word, const char * end);
 
 // On a line, count number of glyphs before and after locations
 void countGlyphsInLine(const char * text, int * before, int * after, const char * beforeLocation, const char *afterLocation = nullptr);

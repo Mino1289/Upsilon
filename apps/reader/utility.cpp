@@ -4,9 +4,9 @@
 
 #ifndef DEVICE
 #include <stdio.h>
-#include <dirent.h> 
+#include <dirent.h>
 #include <sys/stat.h>
-#endif 
+#endif
 
 namespace Reader
 {
@@ -49,12 +49,10 @@ void stringNCopy(char* dest, int max, const char* src, int len) {
 int filesWithExtension(const char* extension, External::Archive::File* files, int filesSize) {
   size_t nbTotalFiles = External::Archive::numberOfFiles();
   int nbFiles = 0;
-  for(size_t i=0; i < nbTotalFiles; ++i)
-  {
+  for(size_t i=0; i < nbTotalFiles; ++i) {
     External::Archive::File file;
     External::Archive::fileAtIndex(i, file);
-    if(stringEndsWith(file.name, ".txt"))
-    {
+    if(stringEndsWith(file.name, extension)) {
       files[nbFiles] = file;
       nbFiles++;
       if(nbFiles == filesSize)
@@ -65,28 +63,28 @@ int filesWithExtension(const char* extension, External::Archive::File* files, in
 }
 #else
 
-static void fillFileData(External::Archive::File& file) {  
+static void fillFileData(External::Archive::File& file) {
   file.data = nullptr;
-  file.dataLength = 0;   
+  file.dataLength = 0;
 
   struct stat info;
   if (stat(file.name, &info) != 0) {
     return;
-  }   
-  
+  }
+
   unsigned char* content = new unsigned char[info.st_size];
   if (content == NULL) {
     return;
-  }   
+  }
   FILE *fp = fopen(file.name, "rb");
   if (fp == NULL) {
     return ;
   }
-  
-  fread(content, info.st_size, 1, fp);    
+
+  fread(content, info.st_size, 1, fp);
   fclose(fp);
   file.data = content;
-  file.dataLength = info.st_size;      
+  file.dataLength = info.st_size;
 }
 
 int filesWithExtension(const char* extension, External::Archive::File* files, int filesSize) {
@@ -111,18 +109,42 @@ int filesWithExtension(const char* extension, External::Archive::File* files, in
 #endif
 
 const char * EndOfPrintableWord(const char * word, const char * end) {
-  if (word == end) {
+  if (word >= end) {
     return word;
   }
   UTF8Decoder decoder(word);
   CodePoint codePoint = decoder.nextCodePoint();
   const char * result = word;
-  while (codePoint != '\n' && codePoint != ' ' && codePoint != '%') {
+  while (codePoint != '\n' && codePoint != ' ' && codePoint != '%' && codePoint != '$' && codePoint != '\\') {
     result = decoder.stringPosition();
     if (result >= end) {
       break;
     }
     codePoint = decoder.nextCodePoint();
+  }
+  return result;
+}
+
+const char * StartOfPrintableWord(const char * word, const char * start) {
+  if (word <= start) {
+    return word;
+  }
+  // Go to start of code point with some code points dark magic
+  if (!((*word & 0x80) == 0)) {
+    word--;
+    while (!(*word & 0x80 && *word & 0x40)) {
+      word--;
+    }
+  }
+  UTF8Decoder decoder(start, word);
+  CodePoint codePoint = decoder.previousCodePoint();
+  const char * result = word;
+  while (codePoint != '\n' && codePoint != ' ' && codePoint != '%' && codePoint != '$') {
+    result = decoder.stringPosition();
+    if (result <= start) {
+      break;
+    }
+    codePoint = decoder.previousCodePoint();
   }
   return result;
 }

@@ -42,6 +42,16 @@ ExpressionNode::Sign MultiplicationNode::sign(Context * context) const {
   return (Sign)sign;
 }
 
+ExpressionNode::IntegerStatus MultiplicationNode::integerStatus(Context * context) const {
+  int nbOfChildren = numberOfChildren();
+  for (int i = 0; i < nbOfChildren; i++) {
+    if (childAtIndex(i)->integerStatus(context) != IntegerStatus::Integer) {
+      return IntegerStatus::Unknown;
+    }
+  }
+  return IntegerStatus::Integer;
+}
+
 int MultiplicationNode::polynomialDegree(Context * context, const char * symbolName) const {
   int degree = 0;
   for (ExpressionNode * c : children()) {
@@ -444,7 +454,7 @@ Expression Multiplication::shallowBeautify(ExpressionNode::ReductionContext * re
   if (hasUnit()) {
     Expression units;
     /* removeUnit has to be called on reduced expression but we want to modify
-     * the least the expression so we use the uninvasive reduction context. */
+     * the least the expression so we use the noninvasive reduction context. */
     self = self.reduceAndRemoveUnit(ExpressionNode::ReductionContext::NonInvasiveReductionContext(*reductionContext), &units);
 
     if (self.isUndefined() || units.isUninitialized()) {

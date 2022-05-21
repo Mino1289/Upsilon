@@ -1,3 +1,4 @@
+#include <ion.h>
 #include <ion/usb.h>
 
 namespace Ion {
@@ -14,7 +15,7 @@ bool isEnumerated() {
 void clearEnumerationInterrupt() {
 }
 
-void DFU(bool, bool, int) {
+void DFU(bool, void*) {
 }
 
 void enable() {

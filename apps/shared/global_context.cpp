@@ -128,20 +128,27 @@ const Expression GlobalContext::ExpressionForSequence(const SymbolAbstract & sym
   if (!rank.isUninitialized()) {
     bool rankIsInteger = false;
     double rankValue = rank.approximateToScalar<double>(ctx, Poincare::Preferences::sharedPreferences()->complexFormat(), Poincare::Preferences::sharedPreferences()->angleUnit());
+    int rankValueFloor = std::floor(rankValue);
     if (rank.type() == ExpressionNode::Type::Rational) {
       Rational n = static_cast<Rational &>(rank);
       rankIsInteger = n.isInteger();
     } else if (!std::isnan(unknownSymbolValue)) {
       /* If unknownSymbolValue is not nan, then we are in the graph app. In order
        * to allow functions like f(x) = u(x+0.5) to be ploted, we need to
-       * approximate the rank and check if it is an integer. Unfortunatly this
+       * approximate the rank and check if it is an integer. Unfortunately this
        * leads to some edge cases were, because of quantification, we have
        * floor(x) = x while x is not integer.*/
-      rankIsInteger = std::floor(rankValue) == rankValue;
+      rankIsInteger = rankValueFloor == rankValue;
     }
-    if (rankIsInteger && !seq.badlyReferencesItself(ctx)) {
-      SequenceContext sqctx(ctx, sequenceStore());
-      return Float<double>::Builder(seq.evaluateXYAtParameter(rankValue, &sqctx).x2());
+    if (rankIsInteger) {
+      if (rankValueFloor - seq.initialRank() < (int) seq.type()) { // Seq can reference itself but be defined explicitly for first values
+        assert(rankValueFloor - seq.initialRank() == 0 || rankValueFloor - seq.initialRank() == 1);
+        return rankValueFloor - seq.initialRank() == 0 ? seq.firstInitialConditionExpressionClone() : seq.secondInitialConditionExpressionClone();
+      }
+      if (!seq.badlyReferencesItself(ctx)) {
+        SequenceContext sqctx(ctx, sequenceStore());
+        return Float<double>::Builder(seq.evaluateXYAtParameter(rankValue, &sqctx).x2());
+      }
     }
   }
   return Float<double>::Builder(NAN);

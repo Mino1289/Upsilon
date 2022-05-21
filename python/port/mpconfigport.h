@@ -5,7 +5,6 @@
 /* MicroPython configuration options
  * We're not listing the default options as defined in mpconfig.h */
 
-#if __EMSCRIPTEN__
 // Enable a PyStack where most objects are allocated instead of always using the heap
 /* This enables to allocate and free memory in a scope (thus, Python can call
  * Python) but also has the collateral effect of removing bugs regarding
@@ -15,8 +14,7 @@
  * collecting roots the transpiled C code is denied access to Javascript
  * variables that can store pointers to the Python heap. The pointed objects
  * are therefore erased prematurely. */
-#define MICROPY_ENABLE_PYSTACK (1)
-#endif
+#define MICROPY_ENABLE_PYSTACK (0)
 
 // Maximum length of a path in the filesystem
 #define MICROPY_ALLOC_PATH_MAX (32)
@@ -54,6 +52,9 @@
 // Support for async/await/async for/async with
 #define MICROPY_PY_ASYNC_AWAIT (0)
 
+// Support for literal string interpolation, f-strings (see PEP 498, Python 3.6+)
+#define MICROPY_PY_FSTRINGS (1)
+
 // Whether to support bytearray object
 #define MICROPY_PY_BUILTINS_BYTEARRAY (1)
 
@@ -84,6 +85,12 @@
 // Whether to provide special math functions: math.{erf,erfc,gamma,lgamma}
 #define MICROPY_PY_MATH_SPECIAL_FUNCTIONS (1)
 
+// Whether to provide math.factorial function
+#define MICROPY_PY_MATH_FACTORIAL (1)
+
+// Whether math.factorial is large, fast and recursive (1) or small and slow (0).
+#define MICROPY_OPT_MATH_FACTORIAL (0)
+
 // Whether to provide "cmath" module
 #define MICROPY_PY_CMATH (1)
 
@@ -97,7 +104,7 @@
 #define MICROPY_PY_STRUCT (0)
 
 // Whether to provide "sys" module
-#define MICROPY_PY_SYS (1)
+#define MICROPY_PY_SYS (0)
 
 // Whether to provide the "urandom" module
 #define MICROPY_PY_URANDOM (1)
@@ -107,6 +114,9 @@
 
 // Whether to support rounding of integers (incl bignum); eg round(123,-1)=120
 #define MICROPY_PY_BUILTINS_ROUND_INT (1)
+
+// Wheter to support all the special methods for custom classes
+#define MICROPY_PY_ALL_SPECIAL_METHODS (1)
 
 // Function to seed URANDOM with on init
 #define MICROPY_PY_URANDOM_SEED_INIT_FUNC micropython_port_random()

@@ -1,10 +1,12 @@
 #include "read_book_controller.h"
+#include <apps/apps_container.h>
 
-namespace Reader 
+namespace Reader
 {
 
 ReadBookController::ReadBookController(Responder * parentResponder) :
-  ViewController(parentResponder)  
+  ViewController(parentResponder),
+  m_readerView(this)
 {
 }
 
@@ -12,13 +14,13 @@ View * ReadBookController::view() {
   return &m_readerView;
 }
 
-void ReadBookController::setBook(const External::Archive::File& file) {
+void ReadBookController::setBook(const External::Archive::File& file, bool isRichTextFile) {
   m_file = &file;
   loadPosition();
-  m_readerView.setText(reinterpret_cast<const char*>(file.data), file.dataLength);
+  m_readerView.setText(reinterpret_cast<const char*>(file.data), file.dataLength, isRichTextFile);
 }
 
-bool ReadBookController::handleEvent(Ion::Events::Event event) {  
+bool ReadBookController::handleEvent(Ion::Events::Event event) {
   if(event == Ion::Events::Down) {
     m_readerView.nextPage();
     return true;
@@ -32,6 +34,13 @@ bool ReadBookController::handleEvent(Ion::Events::Event event) {
 
 void ReadBookController::viewDidDisappear() {
   savePosition();
+}
+
+void ReadBookController::throwError() {
+  static_cast<StackViewController *>(parentResponder())->pop();
+  Container::activeApp()->displayWarning(I18n::Message::SyntaxError);
+  // As the error is thrown when we are drawing, me must redraw the whole screen
+  AppsContainer::sharedAppsContainer()->redrawWindow();
 }
 
 void ReadBookController::savePosition() const {

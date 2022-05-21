@@ -163,10 +163,6 @@ extern "C" {
 }
 
 void MicroPython::init(void * heapStart, void * heapEnd) {
-#if __EMSCRIPTEN__
-  static mp_obj_t pystack[1024];
-  mp_pystack_init(pystack, &pystack[MP_ARRAY_SIZE(pystack)]);
-#endif
   /* We delimit the stack part that will be used by Python. The stackTop is the
    * address of the first object that can be allocated on Python stack. This
    * boundaries are used:
@@ -216,7 +212,7 @@ void MicroPython::collectRootsAtAddress(char * address, int byteLength) {
   uintptr_t alignedAddress = reinterpret_cast<uintptr_t>(address) & bitMaskZeros;
   /* Increase the length consequently with the new alignment
    * (We don't need to increase the byteLength to a sizeof(uintptr_t)-aligned
-   * lenght because no pointer can be stored on less than sizeof(uintptr_t)
+   * length because no pointer can be stored on less than sizeof(uintptr_t)
    * bytes.) */
   int alignedByteLength = byteLength;
   alignedByteLength += reinterpret_cast<uintptr_t>(address) & bitMaskOnes;

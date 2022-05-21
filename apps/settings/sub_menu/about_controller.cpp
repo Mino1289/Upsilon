@@ -26,7 +26,7 @@ AboutController::AboutController(Responder * parentResponder) :
   m_contributorsCell(KDFont::LargeFont, KDFont::SmallFont)
   //m_view(&m_selectableTableView)
 {
-  for (int i = 0; i < k_totalNumberOfCell; i++) {
+  for (int i = 0; i < k_totalNumberOfCell - 1; i++) {
     m_cells[i].setMessageFont(KDFont::LargeFont);
     m_cells[i].setAccessoryFont(KDFont::SmallFont);
     m_cells[i].setAccessoryTextColor(Palette::SecondaryText);
@@ -66,11 +66,20 @@ bool AboutController::handleEvent(Ion::Events::Event event) {
       }
       if (childLabel == I18n::Message::UpsilonVersion) {
         MessageTableCellWithBuffer * myCell = (MessageTableCellWithBuffer *)m_selectableTableView.selectedCell();
-        if (strcmp(myCell->accessoryText(), Ion::UpsilonVersion()) == 0) {
+        if (strcmp(myCell->accessoryText(), Ion::upsilonVersion()) == 0) {
           myCell->setAccessoryText(MP_STRINGIFY(OMEGA_STATE)); //Change for public/dev
           return true;
         }
-        myCell->setAccessoryText(Ion::UpsilonVersion());
+        myCell->setAccessoryText(Ion::upsilonVersion());
+        return true;
+      }
+      if (childLabel == I18n::Message::OmegaVersion) {
+        MessageTableCellWithBuffer * myCell = (MessageTableCellWithBuffer *)m_selectableTableView.selectedCell();
+        if (strcmp(myCell->accessoryText(), Ion::omegaVersion()) == 0) {
+          myCell->setAccessoryText(MP_STRINGIFY(OMEGA_STATE)); //Change for public/dev
+          return true;
+        }
+        myCell->setAccessoryText(Ion::omegaVersion());
         return true;
       }
       if (childLabel == I18n::Message::MemUse) {
@@ -103,11 +112,21 @@ bool AboutController::handleEvent(Ion::Events::Event event) {
       if(childLabel == I18n::Message::Battery){
         MessageTableCellWithBuffer * myCell = (MessageTableCellWithBuffer *)m_selectableTableView.selectedCell();
         char batteryLevel[5];
-        if(strchr(myCell->accessoryText(), '%') == NULL){
-          int batteryLen = Poincare::Integer((int) ((Ion::Battery::voltage() - 3.6) * 166)).serialize(batteryLevel, 5);
-          batteryLevel[batteryLen] = '%';
-          batteryLevel[batteryLen+1] = '\0';
-        }else{
+        if(strchr(myCell->accessoryText(), '%') == NULL) {
+          float voltage = (Ion::Battery::voltage() - 3.6) * 166;
+          if(voltage < 0.0) {
+            myCell->setAccessoryText("1%"); // We cheat...
+            return true;
+          } else if (voltage >= 100.0) {
+            myCell->setAccessoryText("100%");
+            return true;
+          } else {
+            int batteryLen = Poincare::Integer((int) voltage).serialize(batteryLevel, 5);
+            batteryLevel[batteryLen] = '%';
+            batteryLevel[batteryLen+1] = '\0';
+          }
+        }
+        else {
           int batteryLen = Poincare::Number::FloatNumber(Ion::Battery::voltage()).serialize(batteryLevel, 5, Poincare::Preferences::PrintFloatMode::Decimal, 3);
           batteryLevel[batteryLen] = 'V';
           batteryLevel[batteryLen+1] = '\0';
@@ -129,8 +148,8 @@ int AboutController::numberOfRows() const {
 HighlightCell * AboutController::reusableCell(int index, int type) {
   assert(index >= 0);
   if (type == 0) {
-    assert(index < k_totalNumberOfCell-1-(!hasUsernameCell()));
-    return &m_cells[index+(!hasUsernameCell())];
+    assert(index < k_totalNumberOfCell-1);
+    return &m_cells[index];
   }
   assert(index == 0);
   return &m_contributorsCell;
@@ -143,7 +162,7 @@ int AboutController::typeAtLocation(int i, int j) {
 int AboutController::reusableCellCount(int type) {
   switch (type) {
     case 0:
-      return k_totalNumberOfCell-1-(!hasUsernameCell());
+      return k_totalNumberOfCell-1;
     case 1:
       return 1;
     default:
@@ -159,7 +178,6 @@ bool AboutController::hasUsernameCell() const {
 void AboutController::willDisplayCellForIndex(HighlightCell * cell, int index) {
   int i = index + (!hasUsernameCell());
   GenericSubController::willDisplayCellForIndex(cell, i);
-  assert(index >= 0 && index < k_totalNumberOfCell);
   if (m_messageTreeModel->childAtIndex(i)->label() == I18n::Message::Contributors) {
     MessageTableCellWithChevronAndMessage * myTextCell = (MessageTableCellWithChevronAndMessage *)cell;
     myTextCell->setSubtitle(I18n::Message::Default);
@@ -169,12 +187,12 @@ void AboutController::willDisplayCellForIndex(HighlightCell * cell, int index) {
     memUseBuffer[len] = 'k';
     memUseBuffer[len+1] = 'B';
     memUseBuffer[len+2] = '/';
-    
+
     len = Poincare::Integer((int)((float) Ion::Storage::k_storageSize / 1024.f)).serialize(memUseBuffer + len + 3, 4) + len + 3;
     memUseBuffer[len] = 'k';
     memUseBuffer[len+1] = 'B';
     memUseBuffer[len+2] = '\0';
-    
+
     MessageTableCellWithBuffer * myCell = (MessageTableCellWithBuffer *)cell;
     myCell->setAccessoryText(memUseBuffer);
   } else {
@@ -188,8 +206,9 @@ void AboutController::willDisplayCellForIndex(HighlightCell * cell, int index) {
 
     static const char * messages[] = {
       (const char*) Ion::username(),
+      Ion::upsilonVersion(),
+      Ion::omegaVersion(),
       Ion::softwareVersion(),
-      Ion::UpsilonVersion(),
       mpVersion,
       batteryLevel,
       "",
