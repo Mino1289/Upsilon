@@ -34,6 +34,25 @@ Expression InverseModulaire::shallowBeautify(Context * context) {
 }
 
 Expression InverseModulaire::shallowReduce(ExpressionNode::ReductionContext reductionContext) {
+    {
+    Expression e = Expression::defaultShallowReduce();
+    e = e.defaultHandleUnitsInChildren();
+    if (e.isUndefined()) {
+      return e;
+    }
+  }
+  assert(numberOfChildren() > 0);
+
+  // Step 0: Merge children which are IMOD
+  mergeSameTypeChildrenInPlace();
+
+  // Step 1: check that all children are compatible
+  {
+    Expression checkChildren = checkChildrenAreRationalIntegersAndUpdate(reductionContext);
+    if (!checkChildren.isUninitialized()) {
+      return checkChildren;
+    }
+  }
   Expression result = Arithmetic::IMOD(*this);
 
   replaceWithInPlace(result);

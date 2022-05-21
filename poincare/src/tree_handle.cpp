@@ -324,6 +324,7 @@ template Integral TreeHandle::FixedArityBuilder<Integral, IntegralNode>(const Tu
 template IntegralLayout TreeHandle::FixedArityBuilder<IntegralLayout, IntegralLayoutNode>(const Tuple &);
 template InvBinom TreeHandle::FixedArityBuilder<InvBinom, InvBinomNode>(const Tuple &);
 template InvNorm TreeHandle::FixedArityBuilder<InvNorm, InvNormNode>(const Tuple &);
+template InverseModulaire TreeHandle::NAryBuilder<InverseModulaire, InverseModulaireNode>(const Tuple &);
 template LeastCommonMultiple TreeHandle::NAryBuilder<LeastCommonMultiple, LeastCommonMultipleNode>(const Tuple &);
 template KMat TreeHandle::FixedArityBuilder<KMat, KMatNode>(const Tuple &);
 template LeastCommonMultiple TreeHandle::FixedArityBuilder<LeastCommonMultiple, LeastCommonMultipleNode>(const Tuple &);

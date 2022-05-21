@@ -136,7 +136,7 @@ bool Expression::deepIsMatrix(Context * context) const {
     return true;
   }
   // Scalar expressions
-  ExpressionNode::Type types1[] = {ExpressionNode::Type::BinomialCoefficient, ExpressionNode::Type::Derivative, ExpressionNode::Type::Determinant, ExpressionNode::Type::DivisionQuotient, ExpressionNode::Type::DivisionRemainder, ExpressionNode::Type::Factor, ExpressionNode::Type::GreatCommonDivisor, ExpressionNode::Type::Integral, ExpressionNode::Type::LeastCommonMultiple, ExpressionNode::Type::MatrixTrace, ExpressionNode::Type::NthRoot, ExpressionNode::Type::PermuteCoefficient, ExpressionNode::Type::Randint, ExpressionNode::Type::Round, ExpressionNode::Type::SignFunction, ExpressionNode::Type::SquareRoot};
+  ExpressionNode::Type types1[] = {ExpressionNode::Type::BinomialCoefficient, ExpressionNode::Type::Derivative, ExpressionNode::Type::Determinant, ExpressionNode::Type::DivisionQuotient, ExpressionNode::Type::DivisionRemainder, ExpressionNode::Type::Factor, ExpressionNode::Type::GreatCommonDivisor, ExpressionNode::Type::Integral, ExpressionNode::Type::LeastCommonMultiple, ExpressionNode::Type::InverseModulaire, ExpressionNode::Type::MatrixTrace, ExpressionNode::Type::NthRoot, ExpressionNode::Type::PermuteCoefficient, ExpressionNode::Type::Randint, ExpressionNode::Type::Round, ExpressionNode::Type::SignFunction, ExpressionNode::Type::SquareRoot};
   if (isOfType(types1, sizeof(types1)/sizeof(ExpressionNode::Type))) {
     return false;
   }
@@ -539,7 +539,7 @@ bool Expression::isReal(Context * context) const {
   }
 
   // These expressions are always real
-  ExpressionNode::Type types2[] = {ExpressionNode::Type::BinomialCoefficient, ExpressionNode::Type::Derivative, ExpressionNode::Type::DivisionQuotient, ExpressionNode::Type::DivisionRemainder, ExpressionNode::Type::GreatCommonDivisor, ExpressionNode::Type::Integral, ExpressionNode::Type::LeastCommonMultiple, ExpressionNode::Type::PermuteCoefficient, ExpressionNode::Type::Randint, ExpressionNode::Type::Random, ExpressionNode::Type::Round, ExpressionNode::Type::SignFunction, ExpressionNode::Type::Unit};
+  ExpressionNode::Type types2[] = {ExpressionNode::Type::BinomialCoefficient, ExpressionNode::Type::Derivative, ExpressionNode::Type::DivisionQuotient, ExpressionNode::Type::DivisionRemainder, ExpressionNode::Type::GreatCommonDivisor, ExpressionNode::Type::Integral, ExpressionNode::Type::LeastCommonMultiple, ExpressionNode::Type::InverseModulaire, ExpressionNode::Type::PermuteCoefficient, ExpressionNode::Type::Randint, ExpressionNode::Type::Random, ExpressionNode::Type::Round, ExpressionNode::Type::SignFunction, ExpressionNode::Type::Unit};
   if ((isNumber() && !isUndefined()) || isOfType(types2, sizeof(types2)/sizeof(ExpressionNode::Type))) {
     return true;
   }
