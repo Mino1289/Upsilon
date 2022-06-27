@@ -17,7 +17,7 @@ extern "C" {
 
 namespace Code {
 
-static const char * sStandardPromptText = ">>> ";
+static const char * sStandardPromptText = "~$ ";
 
 ConsoleController::ConsoleController(Responder * parentResponder, App * pythonDelegate, ScriptStore * scriptStore
 #if EPSILON_GETOPT
@@ -174,6 +174,8 @@ const char * ConsoleController::inputText(const char * prompt) {
 }
 
 void ConsoleController::viewWillAppear() {
+  Ion::LED::setColor(KDColorBlue);
+  Ion::LED::setBlinking(1000, 0.3f);
   ViewController::viewWillAppear();
   loadPythonEnvironment();
   if (m_importScriptsWhenViewAppears) {
@@ -182,6 +184,10 @@ void ConsoleController::viewWillAppear() {
   }
 
   reloadData(true);
+}
+
+void ConsoleController::viewDidDisappear() {
+  Ion::LED::setColor(KDColorBlack);
 }
 
 void ConsoleController::didBecomeFirstResponder() {
