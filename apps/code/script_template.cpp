@@ -5,7 +5,7 @@ namespace Code {
 constexpr ScriptTemplate emptyScriptTemplate(".py", "\x01" R"(from math import *
 )");
 
-constexpr ScriptTemplate mathsupScriptTemplate(".py", "\x01" R"(
+constexpr ScriptTemplate mathsupScriptTemplate("mathsup.py", "\x01" R"(
 from random import random, uniform
 from math import log2
 
