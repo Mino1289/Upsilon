@@ -5,7 +5,7 @@ namespace Code {
 constexpr ScriptTemplate emptyScriptTemplate(".py", "\x01" R"(from math import *
 )");
 
-constexpr ScriptTemplate mathsupScriptTemplate("mathsup.py", "\x01" R"(from random import random, uniform
+constexpr ScriptTemplate mathsupScriptTemplate("mathsup.py", "\x01" "\x00\x00" R"(from random import random, uniform
 from math import log2
 
 primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101,
