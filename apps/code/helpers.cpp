@@ -10,9 +10,6 @@ const char * PythonTextForEvent(Ion::Events::Event event) {
     if (event.text() == pair.firstString()) {
       return pair.secondString();
     }
-    if (event == Ion::Events::XNT) {
-      return "x";
-    }
   }
   return nullptr;
 }

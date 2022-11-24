@@ -16,7 +16,7 @@ public:
   TextArea(Responder * parentResponder, View * contentView, const KDFont * font = KDFont::LargeFont);
   void setDelegates(InputEventHandlerDelegate * inputEventHandlerDelegate, TextAreaDelegate * delegate) { m_inputEventHandlerDelegate = inputEventHandlerDelegate; m_delegate = delegate; }
   bool handleEvent(Ion::Events::Event event) override;
-  bool handleEventWithText(const char * text, bool indentation = false, bool forceCursorRightOfText = false) override;
+  bool handleEventWithText(const char * text, bool indentation = false, bool forceCursorRightOfText = false, bool shouldRemoveLastCharacter = false) override;
   void setText(char * textBuffer, size_t textBufferSize);
 
 protected:
@@ -111,7 +111,7 @@ protected:
       m_cursorLocation = m_text.text();
     }
     void drawRect(KDContext * ctx, KDRect rect) const override;
-    void drawStringAt(KDContext * ctx, int line, int column, const char * text, int length, KDColor textColor, KDColor backgroundColor, const char * selectionStart, const char * selectionEnd, KDColor backgroundHighlightColor) const;
+    void drawStringAt(KDContext * ctx, int line, int column, const char * text, int length, KDColor textColor, KDColor backgroundColor, const char * selectionStart, const char * selectionEnd, KDColor backgroundHighlightColor, bool isItalic = false) const;
     virtual void drawLine(KDContext * ctx, int line, const char * text, size_t length, int fromColumn, int toColumn, const char * selectionStart, const char * selectionEnd) const = 0;
     virtual void clearRect(KDContext * ctx, KDRect rect) const = 0;
     KDSize minimalSizeForOptimalDisplay() const override;
@@ -120,7 +120,8 @@ protected:
     const char * editedText() const override { return m_text.text(); }
     size_t editedTextLength() const override { return m_text.textLength(); }
     const Text * getText() const { return &m_text; }
-    bool insertTextAtLocation(const char * text, char * location, int textLength = -1) override;
+    bool isAbleToInsertTextAt(int textLength, const char * location, bool shouldRemoveLastCharacter) const override;
+    void insertTextAtLocation(const char * text, char * location, int textLength = -1) override;
     void moveCursorGeo(int deltaX, int deltaY);
     bool removePreviousGlyph() override;
     bool removeEndOfLine() override;

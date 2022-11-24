@@ -81,6 +81,22 @@ dnf install make automake gcc gcc-c++ kernel-devel git ImageMagick libX11-devel 
 
 </details>
 
+<details>
+
+<summary>Nix or Nixos</summary>
+
+<br>
+
+To install all dependencies:
+
+```bash
+nix-shell -p gcc libpng libjpeg xorg.libX11 pkg-config freetype xorg.libXext python3 imagemagick python310Packages.lz4 python310Packages.pypng python310Packages.pypng gcc-arm-embedded
+```
+
+<br>
+
+</details>
+
 <br>
 
 </details>
@@ -145,7 +161,7 @@ You need a windows version >= 1903.
 1. Use simultaneously win + X keys and then click on "admin powershell".
 
 ```powershell
-dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux all /norestart
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 ```
 
 This command activate WSL functionalities.

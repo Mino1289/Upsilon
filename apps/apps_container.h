@@ -18,6 +18,7 @@
 #include "shared/global_context.h"
 #include "clock_timer.h"
 #include "on_boarding/prompt_controller.h"
+#include "xnt_loop.h"
 
 #include <ion/events.h>
 
@@ -28,6 +29,7 @@ public:
   static bool poincareCircuitBreaker();
   virtual int numberOfApps() = 0;
   virtual App::Snapshot * appSnapshotAtIndex(int index) = 0;
+  virtual int appIndexFromSnapshot(App::Snapshot * snapshot) = 0;
   App::Snapshot * initialAppSnapshot();
   App::Snapshot * hardwareTestAppSnapshot();
   App::Snapshot * onBoardingAppSnapshot();
@@ -47,6 +49,8 @@ public:
   void displayExamModePopUp(GlobalPreferences::ExamMode mode);
   void shutdownDueToLowBattery();
   void setShiftAlphaStatus(Ion::Events::ShiftAlphaStatus newStatus);
+  CodePoint XNT(CodePoint defaultXNT, bool * shouldRemoveLastCharacter) { return m_XNTLoop.XNT(defaultXNT, shouldRemoveLastCharacter); }
+  void resetXNT() { m_XNTLoop.reset(); }
   OnBoarding::PromptController * promptController();
   void redrawWindow(bool force = false);
   void activateExamMode(GlobalPreferences::ExamMode examMode);
@@ -67,6 +71,8 @@ private:
   static KDColor k_promptFGColors[];
   static KDColor k_promptBGColors[];
   static int k_promptNumberOfMessages;
+  int m_currentAppIndex; // Home isn't included after the second app switching
+  int m_lastAppIndex;
   AppsWindow m_window;
   EmptyBatteryWindow m_emptyBatteryWindow;
   Shared::GlobalContext m_globalContext;
@@ -82,6 +88,7 @@ private:
   OnBoarding::App::Snapshot m_onBoardingSnapshot;
   HardwareTest::App::Snapshot m_hardwareTestSnapshot;
   USB::App::Snapshot m_usbConnectedSnapshot;
+  XNTLoop m_XNTLoop;
 };
 
 #endif
