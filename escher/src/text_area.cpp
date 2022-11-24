@@ -33,7 +33,7 @@ static inline void InsertSpacesAtLocation(int spacesCount, char * buffer, int bu
   }
 }
 
-bool TextArea::handleEventWithText(const char * text, bool indentation, bool forceCursorRightOfText) {
+bool TextArea::handleEventWithText(const char * text, bool indentation, bool forceCursorRightOfText, bool shouldRemoveLastCharacter) {
   if (*text == 0) {
     return false;
   }
@@ -123,10 +123,18 @@ bool TextArea::handleEventWithText(const char * text, bool indentation, bool for
     return false;
   }
 
-  // Insert the text
-  if (!insertTextAtLocation(text, insertionPosition)) {
+  int textLength = strlen(text);
+  if (!contentView()->isAbleToInsertTextAt(textLength, insertionPosition, shouldRemoveLastCharacter)) {
     return true;
   }
+
+  if (shouldRemoveLastCharacter) {
+    removePreviousGlyph();
+    insertionPosition = const_cast<char *>(cursorLocation());
+  }
+
+  // Insert the text
+  insertTextAtLocation(text, insertionPosition, textLength);
 
   // Insert the indentation
   if (indentation) {
@@ -160,6 +168,9 @@ bool TextArea::handleEventWithText(const char * text, bool indentation, bool for
 }
 
 bool TextArea::handleEvent(Ion::Events::Event event) {
+  if (m_delegate != nullptr && event != Ion::Events::XNT) {
+    m_delegate->textAreaDidReceiveNoneXNTEvent();
+  }
   if (m_delegate != nullptr && m_delegate->textAreaDidReceiveEvent(this, event)) {
     return true;
   }
@@ -513,21 +524,29 @@ void TextArea::ContentView::drawRect(KDContext * ctx, KDRect rect) const {
   }
 }
 
-void TextArea::ContentView::drawStringAt(KDContext * ctx, int line, int column, const char * text, int length, KDColor textColor, KDColor backgroundColor, const char * selectionStart, const char * selectionEnd, KDColor backgroundHighlightColor) const {
+void TextArea::ContentView::drawStringAt(KDContext * ctx, int line, int column, const char * text, int length, KDColor textColor, KDColor backgroundColor, const char * selectionStart, const char * selectionEnd, KDColor backgroundHighlightColor, bool isItalic) const {
   if (length < 0) {
     return;
   }
-  KDSize glyphSize = m_font->glyphSize();
+
+  const KDFont * usedFont = m_font;
+  if (isItalic) {
+    usedFont = m_font->toItalic();
+  }
+
+  KDSize glyphSize = usedFont->glyphSize();
 
   bool drawSelection = selectionStart != nullptr && selectionEnd > text && selectionStart < text + length;
+
   KDPoint nextPoint = ctx->drawString(
-    text,
-    KDPoint(column*glyphSize.width(), line*glyphSize.height()),
-    m_font,
-    textColor,
-    backgroundColor,
-    drawSelection ? (selectionStart >= text ? std::min<KDCoordinate>(length, selectionStart - text) : 0) : length
-  );
+      text,
+      KDPoint(column*glyphSize.width(), line*glyphSize.height()),
+      usedFont,
+      textColor,
+      backgroundColor,
+      drawSelection ? (selectionStart >= text ? std::min<KDCoordinate>(length, selectionStart - text) : 0) : length
+    );
+  
   if (!drawSelection) {
     return;
   }
@@ -537,7 +556,7 @@ void TextArea::ContentView::drawStringAt(KDContext * ctx, int line, int column, 
   nextPoint = ctx->drawString(
     highlightedDrawStart,
     nextPoint,
-    m_font,
+    usedFont,
     textColor,
     backgroundHighlightColor,
     highlightedDrawLength);
@@ -546,7 +565,7 @@ void TextArea::ContentView::drawStringAt(KDContext * ctx, int line, int column, 
   ctx->drawString(
     notHighlightedDrawStart,
     nextPoint,
-    m_font,
+    usedFont,
     textColor,
     backgroundColor,
     length - (notHighlightedDrawStart - text));
@@ -567,12 +586,21 @@ void TextArea::ContentView::setText(char * textBuffer, size_t textBufferSize) {
   m_cursorLocation = text();
 }
 
-bool TextArea::ContentView::insertTextAtLocation(const char * text, char * location, int textLength) {
+bool TextArea::ContentView::isAbleToInsertTextAt(int textLength, const char * location, bool shouldRemoveLastCharacter) const {
+  int removedCharacters = 0;
+  if (shouldRemoveLastCharacter) {
+    UTF8Decoder decoder(m_text.text(), location);
+    const char * previousGlyphPos = decoder.previousGlyphPosition();
+    assert(previousGlyphPos != nullptr);
+    removedCharacters = location - previousGlyphPos;
+  }
+  return m_text.textLength() + textLength - removedCharacters < m_text.bufferSize() && textLength != 0;
+}
+
+void TextArea::ContentView::insertTextAtLocation(const char * text, char * location, int textLength) {
   int textLen = textLength < 0 ? strlen(text) : textLength;
   assert(textLen < 0 || textLen <= strlen(text));
-  if (m_text.textLength() + textLen >= m_text.bufferSize() || textLen == 0) {
-    return false;
-  }
+  assert(isAbleToInsertTextAt(textLen, location, false));
 
   // Scan for \n
   bool lineBreak = UTF8Helper::HasCodePoint(text, '\n', text + textLen);
@@ -581,7 +609,6 @@ bool TextArea::ContentView::insertTextAtLocation(const char * text, char * locat
   // Replace System parentheses (used to keep layout tree structure) by normal parentheses
   Poincare::SerializationHelper::ReplaceSystemParenthesesByUserParentheses(location, textLen);
   reloadRectFromPosition(location, lineBreak);
-  return true;
 }
 
 bool TextArea::ContentView::removePreviousGlyph() {
