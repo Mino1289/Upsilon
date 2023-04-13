@@ -48,7 +48,9 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: 'recursive'
-      - run: make -j2 PLATFORM=simulator TARGET=android
+      - run: wget -nv https://dl.google.com/android/repository/android-ndk-r21e-linux-x86_64.zip
+      - run: unzip -q android-ndk-r21e-linux-x86_64.zip
+      - run: make -j2 PLATFORM=simulator TARGET=android NDK_PATH=./android-ndk-r21e
       - id: 'auth'
         if: ${{ github.event_name == 'push' && github.ref_name == 'upsilon-dev' && github.repository == 'UpsilonNumworks/Upsilon' }}
         uses: 'google-github-actions/auth@v0'
@@ -157,11 +159,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: sudo apt-get install build-essential imagemagick libfreetype6-dev libjpeg-dev libpng-dev pkg-config
-      - uses: numworks/setup-arm-toolchain@2020-q2
+      - uses: numworks/setup-arm-toolchain@2022-08
       - uses: actions/checkout@v2
         with:
           submodules: 'recursive'
-      - run: make -j2 MODEL=n0110 bootloader.dfu
+      - run: make -j2 MODEL=n0110 bootloader
       - run: make -j2 epsilon.A.dfu epsilon.B.dfu
       - run: make -j2 epsilon.onboarding.A.dfu
       - run: make -j2 epsilon.onboarding.B.dfu
@@ -171,6 +173,10 @@ jobs:
       - run: make -j2 epsilon.onboarding.beta.B.dfu
       - run: make -j2 binpack
       - run: cp output/release/device/bootloader/binpack-bootloader-`git rev-parse HEAD | head -c 7`.tgz output/release/device/bootloader/binpack-bootloader.tgz
+      - run: cp output/release/device/n0110/bootloader.bin output/release/device/bootloader/binpack/
+      - run: cp output/release/device/n0110/bootloader.bin output/release/device/bootloader/
+      - run: cd output/release/device/bootloader && for binary in *.bin; do shasum -a 256 -b binpack/${binary} > binpack/${binary}.sha256;done
+      - run: cd output/release/device/bootloader && tar cvfz binpack-bootloader.tgz binpack/*
       - id: 'auth'
         if: ${{ github.event_name == 'push' && github.ref_name == 'upsilon-dev' && github.repository == 'UpsilonNumworks/Upsilon' }}
         uses: 'google-github-actions/auth@v0'
@@ -220,9 +226,9 @@ jobs:
   web:
     runs-on: ubuntu-latest
     steps:
-      - uses: numworks/setup-emscripten@v1
+      - uses: numworks/setup-emscripten@master
         with:
-          sdk: 1.40.1
+          sdk: latest
       - uses: actions/checkout@v2
         with:
           submodules: 'recursive'
